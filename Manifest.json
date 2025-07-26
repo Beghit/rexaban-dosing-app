@@ -2,7 +2,7 @@
   "name": "Rexaban Dosing Assistant",
   "short_name": "Rexaban",
   "description": "A tool to assist with Rexaban dosing recommendations.",
-  "start_url": "/Rexaban.html",
+  "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#1a5c9e",
