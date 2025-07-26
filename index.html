@@ -1110,7 +1110,7 @@
             recoDiv.classList.add('fade-in');
         }
     </script>
-    <script>
+  <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('./service-worker.js')
@@ -1121,6 +1121,8 @@
           console.error('Service Worker registration failed:', error);
         });
     });
+  } else {
+    console.log('Service Workers are not supported in this browser.');
   }
 </script>
 </body>
