@@ -2,18 +2,18 @@
   "name": "Rexaban Dosing Assistant",
   "short_name": "Rexaban",
   "description": "A tool to assist with Rexaban dosing recommendations.",
-  "start_url": "/",   <-- CHANGE THIS TO A SINGLE SLASH
+  "start_url": "/",   <-- VÉRIFIEZ CETTE LIGNE (ligne 5) ET LA VIRGULE PRÉCÉDENTE
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#1a5c9e",
   "icons": [
     {
-      "src": "afric.png",
+      "src": "afric.png",     // IMPORTANT: Assurez-vous que "afric.png" correspond exactement à la casse du fichier sur GitHub (ex: Afric.png)
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "afric.png",
+      "src": "afric.png",     // IDEM
       "sizes": "512x512",
       "type": "image/png"
     }
