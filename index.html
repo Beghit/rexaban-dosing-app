@@ -627,6 +627,7 @@
     <button id="install-button">Installer l'App</button>
     
     <div class="afric-logo">
+        <!-- Using base64 encoded SVG to avoid external PNG dependency -->
         <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiMxYTVjOWUiIHJ4PSIxNSIgcnk9IjE1Ii8+CiAgPHBhdGggZD0iTTI1LDI1IEE0MCw0MCAwIDAsMSA3NSw3NSBBNDAsNDAgMCAwLDEgMjUsMjUiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iNCIvPgogIDx0ZXh0IHg9IjUwIiB5PSI1MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjIwIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSI+QUZSSUM8L3RleHQ+Cjwvc3ZnPg==" alt="Afric Logo">
     </div>
 
@@ -934,170 +935,176 @@
         });
 
         function calculateRivaroxabanDose() {
-            const langDict = translations[currentLanguage];
-            const recoDiv = document.getElementById('recommendation-content');
-            const renalIndicator = document.getElementById('renal-indicator');
+            try {
+                const langDict = translations[currentLanguage];
+                const recoDiv = document.getElementById('recommendation-content');
+                const renalIndicator = document.getElementById('renal-indicator');
 
-            const indication = document.getElementById('indication').value;
-            const age = parseInt(document.getElementById('age').value);
-            const weight = parseInt(document.getElementById('weight').value);
-            const creatinine = parseFloat(document.getElementById('creatinine').value);
-            const hepaticImpairment = document.getElementById('hepatic_impairment').value;
-            const gender = document.getElementById('gender').value;
+                const indication = document.getElementById('indication').value;
+                const age = parseInt(document.getElementById('age').value);
+                const weight = parseInt(document.getElementById('weight').value);
+                const creatinine = parseFloat(document.getElementById('creatinine').value);
+                const hepaticImpairment = document.getElementById('hepatic_impairment').value;
+                const gender = document.getElementById('gender').value;
 
-            if (isNaN(age) || isNaN(weight) || isNaN(creatinine) || age <= 0 || weight <= 0 || creatinine <= 0) {
-                recoDiv.innerHTML = `<p style="color: var(--danger);">${langDict.error_invalid_input}</p>`;
+                if (isNaN(age) || isNaN(weight) || isNaN(creatinine) || age <= 0 || weight <= 0 || creatinine <= 0) {
+                    recoDiv.innerHTML = `<p style="color: var(--danger);">${langDict.error_invalid_input}</p>`;
+                    recoDiv.classList.remove('fade-in');
+                    void recoDiv.offsetWidth;
+                    recoDiv.classList.add('fade-in');
+                    return;
+                }
+
+                if (hepaticImpairment === 'severe') {
+                    recoDiv.innerHTML = `
+                        <div class="dose-display">
+                            <i class="fas fa-ban"></i>
+                            ${langDict.reco_not_recommended}
+                        </div>
+                        <p class="dose-rationale">${langDict.reco_hepatic_severe}</p>
+                    `;
+                    recoDiv.classList.remove('fade-in');
+                    void recoDiv.offsetWidth;
+                    recoDiv.classList.add('fade-in');
+                    return;
+                }
+
+                let crcl = ((140 - age) * weight) / (72 * creatinine);
+                if (gender === 'female') {
+                    crcl *= 0.85;
+                }
+                crcl = Math.round(crcl);
+                
+                let renalStatus = '';
+                if (crcl >= 90) renalStatus = langDict.renal_normal(crcl);
+                else if (crcl >= 60) renalStatus = langDict.renal_mild(crcl);
+                else if (crcl >= 30) renalStatus = langDict.renal_moderate(crcl);
+                else if (crcl >= 15) renalStatus = langDict.renal_severe(crcl);
+                else renalStatus = langDict.renal_esrd(crcl);
+                renalIndicator.textContent = renalStatus;
+                
+                renalIndicator.style.background = 
+                    crcl >= 90 ? '#f0f7ff' : 
+                    crcl >= 60 ? '#e6fffa' : 
+                    crcl >= 30 ? '#fff8e6' : 
+                    crcl >= 15 ? '#ffebee' : '#ffcdd2';
+                
+                renalIndicator.style.color = 
+                    crcl >= 90 ? '#1a5c9e' : 
+                    crcl >= 60 ? '#38a169' : 
+                    crcl >= 30 ? '#d69e2e' : 
+                    crcl >= 15 ? '#e53e3e' : '#b71c1c';
+
+                let dose = '';
+                let rationale = '';
+                let renalNote = '';
+                let criteriaHTML = '';
+                
+                if (indication === 'af') {
+                    if (crcl > 50) {
+                        dose = '20 mg';
+                        rationale = langDict.reco_af_crcl(dose, crcl);
+                        criteriaHTML = `
+                            <div class="dose-criteria">
+                                <h4><i class="fas fa-check-circle"></i> ${langDict.dose_criteria_title}</h4>
+                                <ul>
+                                    <li>${langDict.criteria_af_high}</li>
+                                    <li>${langDict.criteria_af_low}</li>
+                                    <li>${langDict.criteria_af_avoid}</li>
+                                </ul>
+                            </div>
+                        `;
+                    } else if (crcl >= 15) {
+                        dose = '15 mg';
+                        rationale = langDict.reco_af_crcl(dose, crcl);
+                        criteriaHTML = `
+                            <div class="dose-criteria">
+                                <h4><i class="fas fa-check-circle"></i> ${langDict.dose_criteria_title}</h4>
+                                <ul>
+                                    <li>${langDict.criteria_af_high}</li>
+                                    <li>${langDict.criteria_af_low}</li>
+                                    <li>${langDict.criteria_af_avoid}</li>
+                                </ul>
+                            </div>
+                        `;
+                    } else {
+                        dose = langDict.reco_not_recommended;
+                        renalNote = langDict.reco_crcl_low(crcl);
+                        rationale = renalNote;
+                    }
+                    
+                } else if (indication === 'vte_prophylaxis') {
+                    if (crcl < 30) {
+                        dose = langDict.reco_not_recommended;
+                        renalNote = langDict.reco_vte_prophylaxis_contra;
+                    } else {
+                        dose = '10 mg une fois par jour';
+                    }
+                    rationale = langDict.reco_vte_prophylaxis;
+                    
+                } else if (indication === 'vte_initial') {
+                    if (crcl < 30) {
+                        dose = langDict.reco_not_recommended;
+                        renalNote = langDict.reco_crcl_low(crcl);
+                    } else {
+                        dose = '15 mg deux fois par jour';
+                    }
+                    rationale = langDict.reco_vte_initial;
+                    
+                } else if (indication === 'vte_continuation') {
+                    if (crcl < 30) {
+                        dose = langDict.reco_not_recommended;
+                        renalNote = langDict.reco_crcl_low(crcl);
+                    } else {
+                        dose = '20 mg une fois par jour';
+                    }
+                    rationale = langDict.reco_vte_continuation;
+                    
+                } else if (indication === 'vte_prevention') {
+                    if (crcl < 30) {
+                        dose = langDict.reco_not_recommended;
+                        renalNote = langDict.reco_crcl_low(crcl);
+                    } else {
+                        dose = '10 mg une fois par jour';
+                    }
+                    rationale = langDict.reco_vte_prevention;
+                }
+
+                if (hepaticImpairment === 'moderate') {
+                    rationale += langDict.reco_hepatic_moderate_note;
+                }
+                
+                if (renalNote) {
+                    rationale += langDict.reco_renal_note(renalNote);
+                }
+
+                if (dose === langDict.reco_not_recommended) {
+                    recoDiv.innerHTML = `
+                        <div class="dose-display">
+                            <i class="fas fa-ban"></i>
+                            ${dose}
+                        </div>
+                        <p class="dose-rationale">${rationale}</p>
+                    `;
+                } else {
+                    recoDiv.innerHTML = `
+                        <div class="dose-display">
+                            <i class="fas fa-pills"></i>
+                            <div>${langDict.reco_dose_prefix}: <span>${dose}</span></div>
+                        </div>
+                        <p class="dose-rationale">${rationale}</p>
+                        ${criteriaHTML}
+                    `;
+                }
+                
                 recoDiv.classList.remove('fade-in');
                 void recoDiv.offsetWidth;
                 recoDiv.classList.add('fade-in');
-                return;
+            } catch (error) {
+                console.error("Error in calculateRivaroxabanDose:", error);
+                const recoDiv = document.getElementById('recommendation-content');
+                recoDiv.innerHTML = `<p style="color: var(--danger);">Une erreur s'est produite lors du calcul. Veuillez vérifier les valeurs saisies.</p>`;
             }
-
-            if (hepaticImpairment === 'severe') {
-                recoDiv.innerHTML = `
-                    <div class="dose-display">
-                        <i class="fas fa-ban"></i>
-                        ${langDict.reco_not_recommended}
-                    </div>
-                    <p class="dose-rationale">${langDict.reco_hepatic_severe}</p>
-                `;
-                recoDiv.classList.remove('fade-in');
-                void recoDiv.offsetWidth;
-                recoDiv.classList.add('fade-in');
-                return;
-            }
-
-            let crcl = ((140 - age) * weight) / (72 * creatinine);
-            if (gender === 'female') {
-                crcl *= 0.85;
-            }
-            crcl = Math.round(crcl);
-            
-            let renalStatus = '';
-            if (crcl >= 90) renalStatus = langDict.renal_normal(crcl);
-            else if (crcl >= 60) renalStatus = langDict.renal_mild(crcl);
-            else if (crcl >= 30) renalStatus = langDict.renal_moderate(crcl);
-            else if (crcl >= 15) renalStatus = langDict.renal_severe(crcl);
-            else renalStatus = langDict.renal_esrd(crcl);
-            renalIndicator.textContent = renalStatus;
-            
-            renalIndicator.style.background = 
-                crcl >= 90 ? '#f0f7ff' : 
-                crcl >= 60 ? '#e6fffa' : 
-                crcl >= 30 ? '#fff8e6' : 
-                crcl >= 15 ? '#ffebee' : '#ffcdd2';
-            
-            renalIndicator.style.color = 
-                crcl >= 90 ? '#1a5c9e' : 
-                crcl >= 60 ? '#38a169' : 
-                crcl >= 30 ? '#d69e2e' : 
-                crcl >= 15 ? '#e53e3e' : '#b71c1c';
-
-            let dose = '';
-            let rationale = '';
-            let renalNote = '';
-            let criteriaHTML = '';
-            
-            if (indication === 'af') {
-                if (crcl > 50) {
-                    dose = '20 mg';
-                    rationale = langDict.reco_af_crcl(dose, crcl);
-                    criteriaHTML = `
-                        <div class="dose-criteria">
-                            <h4><i class="fas fa-check-circle"></i> ${langDict.dose_criteria_title}</h4>
-                            <ul>
-                                <li>${langDict.criteria_af_high}</li>
-                                <li>${langDict.criteria_af_low}</li>
-                                <li>${langDict.criteria_af_avoid}</li>
-                            </ul>
-                        </div>
-                    `;
-                } else if (crcl >= 15) {
-                    dose = '15 mg';
-                    rationale = langDict.reco_af_crcl(dose, crcl);
-                    criteriaHTML = `
-                        <div class="dose-criteria">
-                            <h4><i class="fas fa-check-circle"></i> ${langDict.dose_criteria_title}</h4>
-                            <ul>
-                                <li>${langDict.criteria_af_high}</li>
-                                <li>${langDict.criteria_af_low}</li>
-                                <li>${langDict.criteria_af_avoid}</li>
-                            </ul>
-                        </div>
-                    `;
-                } else {
-                    dose = langDict.reco_not_recommended;
-                    renalNote = langDict.reco_crcl_low(crcl);
-                    rationale = renalNote;
-                }
-                
-            } else if (indication === 'vte_prophylaxis') {
-                if (crcl < 30) {
-                    dose = langDict.reco_not_recommended;
-                    renalNote = langDict.reco_vte_prophylaxis_contra;
-                } else {
-                    dose = '10 mg une fois par jour';
-                }
-                rationale = langDict.reco_vte_prophylaxis;
-                
-            } else if (indication === 'vte_initial') {
-                if (crcl < 30) {
-                    dose = langDict.reco_not_recommended;
-                    renalNote = langDict.reco_crcl_low(crcl);
-                } else {
-                    dose = '15 mg deux fois par jour';
-                }
-                rationale = langDict.reco_vte_initial;
-                
-            } else if (indication === 'vte_continuation') {
-                if (crcl < 30) {
-                    dose = langDict.reco_not_recommended;
-                    renalNote = langDict.reco_crcl_low(crcl);
-                } else {
-                    dose = '20 mg une fois par jour';
-                }
-                rationale = langDict.reco_vte_continuation;
-                
-            } else if (indication === 'vte_prevention') {
-                if (crcl < 30) {
-                    dose = langDict.reco_not_recommended;
-                    renalNote = langDict.reco_crcl_low(crcl);
-                } else {
-                    dose = '10 mg une fois par jour';
-                }
-                rationale = langDict.reco_vte_prevention;
-            }
-
-            if (hepaticImpairment === 'moderate') {
-                rationale += langDict.reco_hepatic_moderate_note;
-            }
-            
-            if (renalNote) {
-                rationale += langDict.reco_renal_note(renalNote);
-            }
-
-            if (dose === langDict.reco_not_recommended) {
-                recoDiv.innerHTML = `
-                    <div class="dose-display">
-                        <i class="fas fa-ban"></i>
-                        ${dose}
-                    </div>
-                    <p class="dose-rationale">${rationale}</p>
-                `;
-            } else {
-                recoDiv.innerHTML = `
-                    <div class="dose-display">
-                        <i class="fas fa-pills"></i>
-                        <div>${langDict.reco_dose_prefix}: <span>${dose}</span></div>
-                    </div>
-                    <p class="dose-rationale">${rationale}</p>
-                    ${criteriaHTML}
-                `;
-            }
-            
-            recoDiv.classList.remove('fade-in');
-            void recoDiv.offsetWidth;
-            recoDiv.classList.add('fade-in');
         }
         
         let deferredPrompt;
@@ -1130,7 +1137,7 @@
         
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/rexaban-dosing-app/service-worker.js')
+                navigator.serviceWorker.register('./service-worker.js')
                     .then(reg => {
                         console.log('Service Worker registered: ', reg);
                     })
