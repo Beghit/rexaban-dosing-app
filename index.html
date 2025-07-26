@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-<link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="/rexaban-dosing-app/manifest.json">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1a5c9e">
     <title>Rexaban Dosing Assistant</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -608,12 +609,38 @@
         .fade-in {
             animation: fadeIn 0.5s ease-out;
         }
+        
+        /* Install button */
+        #install-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: none;
+        }
+        
+        #install-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
-    <!-- Larger Afric Logo with corrected image path -->
+    <!-- Install button (hidden by default) -->
+    <button id="install-button">Install App</button>
+    
+    <!-- Larger Afric Logo with corrected absolute path -->
     <div class="afric-logo">
-        <img src="afric.png" alt="Afric Logo">
+        <img src="/rexaban-dosing-app/afric.png" alt="Afric Logo">
     </div>
 
     <div class="container">
@@ -825,7 +852,8 @@
                 renal_mild: (crcl) => `CrCl: ${crcl} mL/min (Mild Impairment)`,
                 renal_moderate: (crcl) => `CrCl: ${crcl} mL/min (Moderate Impairment)`,
                 renal_severe: (crcl) => `CrCl: ${crcl} mL/min (Severe Impairment)`,
-                renal_esrd: (crcl) => `CrCl: ${crcl} mL/min (ESRD)`
+                renal_esrd: (crcl) => `CrCl: ${crcl} mL/min (ESRD)",
+                install_button: "Install App"
             },
             fr: {
                 main_title: "Assistant de Dosage Rexaban",
@@ -882,13 +910,15 @@
                 renal_mild: (crcl) => `Clairance Créatinine: ${crcl} mL/min (Insuffisance Légère)`,
                 renal_moderate: (crcl) => `Clairance Créatinine: ${crcl} mL/min (Insuffisance Modérée)`,
                 renal_severe: (crcl) => `Clairance Créatinine: ${crcl} mL/min (Insuffisance Sévère)`,
-                renal_esrd: (crcl) => `Clairance Créatinine: ${crcl} mL/min (Maladie rénale terminale)`
+                renal_esrd: (crcl) => `Clairance Créatinine: ${crcl} mL/min (Maladie rénale terminale)`,
+                install_button: "Installer l'App"
             }
         };
 
         // --- LANGUAGE SWITCHER LOGIC ---
         let currentLanguage = 'en';
         const langToggle = document.getElementById('language-toggle');
+        const installButton = document.getElementById('install-button');
 
         function setLanguage(lang) {
             currentLanguage = lang;
@@ -898,6 +928,10 @@
                     element.innerHTML = translations[lang][key];
                 }
             });
+            // Update install button text
+            if (installButton) {
+                installButton.textContent = translations[lang].install_button;
+            }
             // Recalculate to update the recommendation text
             calculateRivaroxabanDose();
         }
@@ -1109,21 +1143,53 @@
             void recoDiv.offsetWidth; // Trigger reflow
             recoDiv.classList.add('fade-in');
         }
-    </script>
-  <script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./service-worker.js')
-        .then((registration) => {
-          console.log('Service Worker registered with scope:', registration.scope);
-        })
-        .catch((error) => {
-          console.error('Service Worker registration failed:', error);
+        
+        // --- PWA INSTALLATION HANDLING ---
+        let deferredPrompt;
+        const installBtn = document.getElementById('install-button');
+        
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // Show install button
+            installBtn.style.display = 'block';
+            installBtn.textContent = translations[currentLanguage].install_button;
+            
+            installBtn.addEventListener('click', () => {
+                // Show the install prompt
+                deferredPrompt.prompt();
+                
+                // Wait for the user to respond to the prompt
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the install prompt');
+                    } else {
+                        console.log('User dismissed the install prompt');
+                    }
+                    deferredPrompt = null;
+                    installBtn.style.display = 'none';
+                });
+            });
         });
-    });
-  } else {
-    console.log('Service Workers are not supported in this browser.');
-  }
-</script>
+        
+        window.addEventListener('appinstalled', () => {
+            console.log('PWA was installed');
+            installBtn.style.display = 'none';
+        });
+        
+        // --- SERVICE WORKER REGISTRATION ---
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/rexaban-dosing-app/service-worker.js')
+                    .then(reg => {
+                        console.log('Service Worker registered: ', reg);
+                    })
+                    .catch(err => {
+                        console.log('Service Worker registration failed: ', err);
+                    });
+            });
+        }
+    </script>
 </body>
 </html>
