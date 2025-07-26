@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <link rel="manifest" href="/rexaban-dosing-app/manifest.json">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#1a5c9e">
-    <title>Rexaban Dosing Assistant</title>
+    <title>Assistant de Dosage Rexaban</title>
+    <link rel="manifest" href="/rexaban-dosing-app/manifest.json">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -56,7 +56,6 @@
             z-index: 10;
         }
 
-        /* Afric Logo - Larger and more prominent */
         .afric-logo {
             position: fixed;
             top: 20px;
@@ -88,7 +87,6 @@
             animation: none;
         }
 
-        /* Header */
         .app-header {
             display: flex;
             justify-content: space-between;
@@ -100,7 +98,7 @@
             position: relative;
             border-left: 5px solid var(--primary);
             animation: fadeInDown 0.6s ease-out;
-            margin-left: 120px; /* Increased space for larger logo */
+            margin-left: 120px;
         }
 
         .logo-container {
@@ -192,7 +190,6 @@
             transform: translateX(24px);
         }
 
-        /* Main Content */
         .main-content {
             display: grid;
             grid-template-columns: 1fr;
@@ -205,7 +202,6 @@
             }
         }
 
-        /* Form Section */
         .form-section {
             background: var(--card-bg);
             border-radius: var(--border-radius);
@@ -305,7 +301,6 @@
             transform: translateY(-2px);
         }
 
-        /* Renal function indicator */
         .renal-indicator {
             margin-top: 10px;
             padding: 10px;
@@ -317,7 +312,6 @@
             font-size: 1rem;
         }
 
-        /* Results Section */
         .results-section {
             background: var(--card-bg);
             border-radius: var(--border-radius);
@@ -452,7 +446,6 @@
             line-height: 1.7;
         }
 
-        /* Footer */
         .app-footer {
             background: var(--card-bg);
             border-radius: var(--border-radius);
@@ -480,7 +473,6 @@
             margin-bottom: 5px;
         }
 
-        /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -545,14 +537,13 @@
             }
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .app-header {
                 flex-direction: column;
                 gap: 15px;
                 align-items: flex-start;
                 margin-left: 0;
-                padding-left: 120px; /* Maintain space for larger logo */
+                padding-left: 120px;
             }
             
             .lang-toggle-container {
@@ -601,16 +592,14 @@
             }
             
             .app-header {
-                padding-left: 100px; /* Adjust for smaller screens */
+                padding-left: 100px;
             }
         }
         
-        /* Added animation class */
         .fade-in {
             animation: fadeIn 0.5s ease-out;
         }
         
-        /* Install button */
         #install-button {
             position: fixed;
             bottom: 20px;
@@ -635,65 +624,58 @@
     </style>
 </head>
 <body>
-    <!-- Install button (hidden by default) -->
-    <button id="install-button">Install App</button>
+    <button id="install-button">Installer l'App</button>
     
-    <!-- Larger Afric Logo with corrected absolute path -->
     <div class="afric-logo">
-        <img src="/rexaban-dosing-app/afric.png" alt="Afric Logo">
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiMxYTVjOWUiIHJ4PSIxNSIgcnk9IjE1Ii8+CiAgPHBhdGggZD0iTTI1LDI1IEE0MCw0MCAwIDAsMSA3NSw3NSBBNDAsNDAgMCAwLDEgMjUsMjUiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iNCIvPgogIDx0ZXh0IHg9IjUwIiB5PSI1MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjIwIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSI+QUZSSUM8L3RleHQ+Cjwvc3ZnPg==" alt="Afric Logo">
     </div>
 
     <div class="container">
-        <!-- Header -->
         <header class="app-header">
             <div class="logo-container">
                 <div class="logo">
                     <i class="fas fa-heartbeat"></i>
                 </div>
                 <div class="title-container">
-                    <h1 data-lang-key="main_title">Rexaban Dosing Assistant</h1>
-                    <p data-lang-key="subtitle">Rivaroxaban Dosing Guide for Healthcare Professionals</p>
+                    <h1 data-lang-key="main_title">Assistant de Dosage Rexaban</h1>
+                    <p data-lang-key="subtitle">Guide de Dosage du Rivaroxaban pour Professionnels de Santé</p>
                 </div>
             </div>
             <div class="lang-toggle-container">
-                <span data-lang-key="lang_en">English</span>
+                <span data-lang-key="lang_fr">Français</span>
                 <label class="lang-toggle">
-                    <input type="checkbox" id="language-toggle">
+                    <input type="checkbox" id="language-toggle" checked>
                     <span class="slider"></span>
                 </label>
-                <span data-lang-key="lang_fr">Français</span>
+                <span data-lang-key="lang_en">English</span>
             </div>
         </header>
 
-        <!-- Main Content -->
         <div class="main-content">
-            <!-- Form Section -->
             <section class="form-section">
                 <h2 class="section-title">
                     <i class="fas fa-user-injured"></i>
-                    <span data-lang-key="patient_info">Patient Information</span>
+                    <span data-lang-key="patient_info">Informations du Patient</span>
                 </h2>
                 <div class="form-grid">
-                    <!-- Indication -->
                     <div class="form-group full-width">
                         <label for="indication">
                             <i class="fas fa-stethoscope"></i>
-                            <span data-lang-key="indication_label">Indication for Rexaban</span>
+                            <span data-lang-key="indication_label">Indication pour Rexaban</span>
                         </label>
                         <select id="indication">
-                            <option value="af" data-lang-key="indication_af">Non-Valvular Atrial Fibrillation</option>
-                            <option value="vte_prophylaxis" data-lang-key="indication_vte_prophylaxis">VTE Prophylaxis (Post-Hip/Knee Replacement)</option>
-                            <option value="vte_initial" data-lang-key="indication_vte_initial">Initial Treatment of DVT/PE (First 21 Days)</option>
-                            <option value="vte_continuation" data-lang-key="indication_vte_continuation">Continuation Treatment of DVT/PE (After 21 Days)</option>
-                            <option value="vte_prevention" data-lang-key="indication_vte_prevention">Prevention of Recurrent DVT/PE</option>
+                            <option value="af" data-lang-key="indication_af">Fibrillation Auriculaire Non Valvulaire</option>
+                            <option value="vte_prophylaxis" data-lang-key="indication_vte_prophylaxis">Prophylaxie de la MTEV (Après Prothèse de Hanche/Genou)</option>
+                            <option value="vte_initial" data-lang-key="indication_vte_initial">Traitement Initial de TVP/EP (21 premiers jours)</option>
+                            <option value="vte_continuation" data-lang-key="indication_vte_continuation">Poursuite du Traitement de TVP/EP (Après 21 jours)</option>
+                            <option value="vte_prevention" data-lang-key="indication_vte_prevention">Prévention de la Récidive de TVP/EP</option>
                         </select>
                     </div>
 
-                    <!-- Patient Data -->
                     <div class="form-group">
                         <label for="age">
                             <i class="fas fa-birthday-cake"></i>
-                            <span data-lang-key="age_label">Age (years)</span>
+                            <span data-lang-key="age_label">Âge (années)</span>
                         </label>
                         <input type="number" id="age" value="68" min="18">
                     </div>
@@ -701,18 +683,18 @@
                     <div class="form-group">
                         <label for="gender">
                             <i class="fas fa-venus-mars"></i>
-                            <span data-lang-key="gender_label">Gender</span>
+                            <span data-lang-key="gender_label">Genre</span>
                         </label>
                         <select id="gender">
-                            <option value="male" data-lang-key="gender_male">Male</option>
-                            <option value="female" data-lang-key="gender_female">Female</option>
+                            <option value="male" data-lang-key="gender_male">Masculin</option>
+                            <option value="female" data-lang-key="gender_female">Féminin</option>
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label for="weight">
                             <i class="fas fa-weight-scale"></i>
-                            <span data-lang-key="weight_label">Weight (kg)</span>
+                            <span data-lang-key="weight_label">Poids (kg)</span>
                         </label>
                         <input type="number" id="weight" value="72" min="30">
                     </div>
@@ -720,82 +702,79 @@
                     <div class="form-group">
                         <label for="creatinine">
                             <i class="fas fa-flask"></i>
-                            <span data-lang-key="creatinine_label">Serum Creatinine (mg/dL)</span>
+                            <span data-lang-key="creatinine_label">Créatinine Sérique (mg/dL)</span>
                         </label>
                         <input type="number" id="creatinine" value="1.1" step="0.1" min="0.1">
                         <div class="renal-indicator" id="renal-indicator">
-                            CrCl: 72 mL/min (Normal)
+                            Clairance Créatinine: 72 mL/min (Normale)
                         </div>
                     </div>
                     
                     <div class="form-group">
                         <label for="hepatic_impairment">
                             <i class="fas fa-liver"></i>
-                            <span data-lang-key="hepatic_label">Hepatic Function</span>
+                            <span data-lang-key="hepatic_label">Fonction Hépatique</span>
                         </label>
                         <select id="hepatic_impairment">
-                            <option value="none" data-lang-key="hepatic_none">None / Mild</option>
-                            <option value="moderate" data-lang-key="hepatic_moderate">Moderate</option>
-                            <option value="severe" data-lang-key="hepatic_severe">Severe</option>
+                            <option value="none" data-lang-key="hepatic_none">Aucune / Légère</option>
+                            <option value="moderate" data-lang-key="hepatic_moderate">Modérée</option>
+                            <option value="severe" data-lang-key="hepatic_severe">Sévère</option>
                         </select>
                     </div>
                 </div>
             </section>
 
-            <!-- Results Section -->
             <section class="results-section">
                 <h2 class="section-title">
                     <i class="fas fa-file-medical"></i>
-                    <span data-lang-key="reco_title">Dosing Recommendation</span>
+                    <span data-lang-key="reco_title">Recommandation de Dosage</span>
                 </h2>
                 <div class="result-card" id="recommendation-content">
                     <div class="dose-display">
                         <i class="fas fa-pills"></i>
-                        <div>20 mg once daily</div>
+                        <div>20 mg une fois par jour</div>
                     </div>
-                    <p class="dose-rationale">For NVAF: 20 mg once daily with evening meal. (CrCl approx. 72 mL/min).</p>
+                    <p class="dose-rationale">Pour FA non valvulaire : 20 mg une fois par jour avec le repas du soir. (Clairance Créatinine approx. 72 mL/min).</p>
                     <div class="dose-criteria">
-                        <h4><i class="fas fa-check-circle"></i> Dose Adjustment Criteria</h4>
+                        <h4><i class="fas fa-check-circle"></i> <span data-lang-key="dose_criteria_title">Critères d'Ajustement de Dose</span></h4>
                         <ul>
-                            <li>CrCl >50 mL/min: 20 mg once daily</li>
-                            <li>CrCl 15-50 mL/min: 15 mg once daily</li>
-                            <li>CrCl &lt;15 mL/min: Not Recommended</li>
-                            <li>Prevention dose contraindicated if CrCl &lt;30 mL/min</li>
+                            <li data-lang-key="criteria_af_high">Clairance Créatinine >50 mL/min: 20 mg une fois par jour</li>
+                            <li data-lang-key="criteria_af_low">Clairance Créatinine 15-50 mL/min: 15 mg une fois par jour</li>
+                            <li data-lang-key="criteria_af_avoid">Clairance Créatinine &lt;15 mL/min: Non Recommandé</li>
+                            <li data-lang-key="criteria_vte_avoid">Dose de prévention contre-indiquée si Clairance Créatinine &lt;30 mL/min</li>
                         </ul>
                     </div>
                 </div>
                 
                 <h2 class="section-title">
                     <i class="fas fa-exclamation-triangle"></i>
-                    <span data-lang-key="cautions_title">Important Considerations</span>
+                    <span data-lang-key="cautions_title">Considérations Importantes</span>
                 </h2>
                 <div class="caution-card">
                     <div class="caution-title">
                         <i class="fas fa-info-circle"></i>
-                        <h3 data-lang-key="contraindications_title">Contraindications & Cautions</h3>
+                        <h3 data-lang-key="contraindications_title">Contre-indications & Précautions</h3>
                     </div>
                     <ul class="caution-list">
-                        <li data-lang-key="caution_1"><strong>Absolute Contraindications:</strong> Active bleeding, prosthetic heart valves, severe hypersensitivity to rivaroxaban.</li>
-                        <li data-lang-key="caution_2"><strong>Drug Interactions:</strong> Avoid with strong CYP3A4 and P-gp inducers/inhibitors. Use caution with NSAIDs and antiplatelets.</li>
-                        <li data-lang-key="caution_3"><strong>Renal Impairment:</strong> Avoid if CrCl &lt;15 mL/min (NVAF) or &lt;30 mL/min (VTE treatment). Prevention dose contraindicated if CrCl &lt;30 mL/min.</li>
-                        <li data-lang-key="caution_4"><strong>Hepatic Impairment:</strong> Avoid in severe impairment (Child-Pugh C). Use caution in moderate impairment.</li>
-                        <li data-lang-key="caution_5"><strong>Procedures:</strong> Discontinue at least 24 hours before invasive procedures.</li>
+                        <li data-lang-key="caution_1"><strong>Contre-indications absolues:</strong> Saignement actif, valves cardiaques prothétiques, hypersensibilité sévère au rivaroxaban.</li>
+                        <li data-lang-key="caution_2"><strong>Interactions médicamenteuses:</strong> Éviter avec les inducteurs/inhibiteurs puissants du CYP3A4 et de la P-gp. Prudence avec les AINS et les antiplaquettaires.</li>
+                        <li data-lang-key="caution_3"><strong>Insuffisance rénale:</strong> Éviter si Clairance Créatinine &lt;15 mL/min (FA) ou &lt;30 mL/min (traitement MTEV). Dose de prévention contre-indiquée si Clairance Créatinine &lt;30 mL/min.</li>
+                        <li data-lang-key="caution_4"><strong>Insuffisance hépatique:</strong> Éviter en cas d'insuffisance sévère (Child-Pugh C). Prudence en cas d'insuffisance modérée.</li>
+                        <li data-lang-key="caution_5"><strong>Procédures:</strong> Arrêter au moins 24 heures avant les procédures invasives.</li>
                     </ul>
                 </div>
             </section>
         </div>
 
-        <!-- Footer -->
         <footer class="app-footer">
             <p class="footer-disclaimer" data-lang-key="footer_disclaimer_1">
-                This tool is for informational purposes only and is not a substitute for professional medical advice, diagnosis, or treatment. All clinical decisions must be made by a qualified healthcare provider.
+                Cet outil est fourni à titre informatif uniquement et ne remplace pas un avis médical professionnel, un diagnostic ou un traitement. Toutes les décisions cliniques doivent être prises par un professionnel de la santé qualifié.
             </p>
-            <p><strong class="signature">Developed by Dr EL HAJJAJ BELGHAIT</strong></p>
+            <p><strong class="signature">Développé par Dr EL HAJJAJ BELGHAIT</strong></p>
         </footer>
     </div>
 
     <script>
-        // --- TRANSLATION DATA ---
         const translations = {
             en: {
                 main_title: "Rexaban Dosing Assistant",
@@ -829,7 +808,6 @@
                 footer_disclaimer_1: "This tool is for informational purposes only and is not a substitute for professional medical advice, diagnosis, or treatment. All clinical decisions must be made by a qualified healthcare provider.",
                 lang_en: "English",
                 lang_fr: "Français",
-                // Dynamic strings
                 reco_dose_prefix: "Recommended Rexaban Dose",
                 error_invalid_input: "Please enter valid positive numbers for age, weight, and creatinine.",
                 reco_not_recommended: "Not Recommended",
@@ -844,15 +822,15 @@
                 reco_hepatic_moderate_note: " Use with caution in moderate hepatic impairment.",
                 reco_renal_note: (note) => ` ${note}`,
                 dose_criteria_title: "Dose Adjustment Criteria",
-                criteria_af_high: "CrCl >50 mL/min",
-                criteria_af_low: "CrCl 15-50 mL/min",
-                criteria_af_avoid: "CrCl <15 mL/min",
-                criteria_vte_avoid: "CrCl <30 mL/min for VTE treatment",
+                criteria_af_high: "CrCl >50 mL/min: 20 mg once daily",
+                criteria_af_low: "CrCl 15-50 mL/min: 15 mg once daily",
+                criteria_af_avoid: "CrCl <15 mL/min: Not Recommended",
+                criteria_vte_avoid: "Prevention dose contraindicated if CrCl <30 mL/min",
                 renal_normal: (crcl) => `CrCl: ${crcl} mL/min (Normal)`,
                 renal_mild: (crcl) => `CrCl: ${crcl} mL/min (Mild Impairment)`,
                 renal_moderate: (crcl) => `CrCl: ${crcl} mL/min (Moderate Impairment)`,
                 renal_severe: (crcl) => `CrCl: ${crcl} mL/min (Severe Impairment)`,
-                renal_esrd: (crcl) => `CrCl: ${crcl} mL/min (ESRD)",
+                renal_esrd: (crcl) => `CrCl: ${crcl} mL/min (ESRD)`,
                 install_button: "Install App"
             },
             fr: {
@@ -887,7 +865,6 @@
                 footer_disclaimer_1: "Cet outil est fourni à titre informatif uniquement et ne remplace pas un avis médical professionnel, un diagnostic ou un traitement. Toutes les décisions cliniques doivent être prises par un professionnel de la santé qualifié.",
                 lang_en: "English",
                 lang_fr: "Français",
-                // Dynamic strings
                 reco_dose_prefix: "Dose de Rexaban Recommandée",
                 error_invalid_input: "Veuillez entrer des nombres positifs valides pour l'âge, le poids et la créatinine.",
                 reco_not_recommended: "Non Recommandé",
@@ -902,10 +879,10 @@
                 reco_hepatic_moderate_note: " Utiliser avec prudence en cas d'insuffisance hépatique modérée.",
                 reco_renal_note: (note) => ` ${note}`,
                 dose_criteria_title: "Critères d'Ajustement de Dose",
-                criteria_af_high: "Clairance Créatinine >50 mL/min",
-                criteria_af_low: "Clairance Créatinine 15-50 mL/min",
-                criteria_af_avoid: "Clairance Créatinine <15 mL/min",
-                criteria_vte_avoid: "Clairance Créatinine <30 mL/min pour traitement MTEV",
+                criteria_af_high: "Clairance Créatinine >50 mL/min: 20 mg une fois par jour",
+                criteria_af_low: "Clairance Créatinine 15-50 mL/min: 15 mg une fois par jour",
+                criteria_af_avoid: "Clairance Créatinine <15 mL/min: Non Recommandé",
+                criteria_vte_avoid: "Dose de prévention contre-indiquée si Clairance Créatinine <30 mL/min",
                 renal_normal: (crcl) => `Clairance Créatinine: ${crcl} mL/min (Normale)`,
                 renal_mild: (crcl) => `Clairance Créatinine: ${crcl} mL/min (Insuffisance Légère)`,
                 renal_moderate: (crcl) => `Clairance Créatinine: ${crcl} mL/min (Insuffisance Modérée)`,
@@ -915,8 +892,7 @@
             }
         };
 
-        // --- LANGUAGE SWITCHER LOGIC ---
-        let currentLanguage = 'en';
+        let currentLanguage = 'fr';
         const langToggle = document.getElementById('language-toggle');
         const installButton = document.getElementById('install-button');
 
@@ -925,14 +901,13 @@
             document.querySelectorAll('[data-lang-key]').forEach(element => {
                 const key = element.getAttribute('data-lang-key');
                 if (translations[lang][key]) {
+                    if (typeof translations[lang][key] === 'function') return;
                     element.innerHTML = translations[lang][key];
                 }
             });
-            // Update install button text
             if (installButton) {
                 installButton.textContent = translations[lang].install_button;
             }
-            // Recalculate to update the recommendation text
             calculateRivaroxabanDose();
         }
 
@@ -944,22 +919,18 @@
             }
         });
 
-        // --- CALCULATION LOGIC ---
         document.addEventListener('DOMContentLoaded', () => {
             const allInputs = document.querySelectorAll('.form-section input, .form-section select');
             
-            // Add event listeners for real-time calculation
             allInputs.forEach(input => {
                 input.addEventListener('input', function() {
-                    // Debounce calculation
                     clearTimeout(window.calculationTimeout);
                     window.calculationTimeout = setTimeout(calculateRivaroxabanDose, 300);
                 });
             });
             
-            // Initial calculation on page load
             calculateRivaroxabanDose();
-            setLanguage('en'); // Set default language
+            setLanguage('fr');
         });
 
         function calculateRivaroxabanDose() {
@@ -967,7 +938,6 @@
             const recoDiv = document.getElementById('recommendation-content');
             const renalIndicator = document.getElementById('renal-indicator');
 
-            // 1. Get all input values
             const indication = document.getElementById('indication').value;
             const age = parseInt(document.getElementById('age').value);
             const weight = parseInt(document.getElementById('weight').value);
@@ -975,16 +945,14 @@
             const hepaticImpairment = document.getElementById('hepatic_impairment').value;
             const gender = document.getElementById('gender').value;
 
-            // 2. Validate inputs
             if (isNaN(age) || isNaN(weight) || isNaN(creatinine) || age <= 0 || weight <= 0 || creatinine <= 0) {
                 recoDiv.innerHTML = `<p style="color: var(--danger);">${langDict.error_invalid_input}</p>`;
                 recoDiv.classList.remove('fade-in');
-                void recoDiv.offsetWidth; // Trigger reflow
+                void recoDiv.offsetWidth;
                 recoDiv.classList.add('fade-in');
                 return;
             }
 
-            // 3. Check for contraindications first
             if (hepaticImpairment === 'severe') {
                 recoDiv.innerHTML = `
                     <div class="dose-display">
@@ -999,14 +967,12 @@
                 return;
             }
 
-            // 4. Cockcroft-Gault formula for CrCl with gender adjustment
             let crcl = ((140 - age) * weight) / (72 * creatinine);
             if (gender === 'female') {
                 crcl *= 0.85;
             }
             crcl = Math.round(crcl);
             
-            // Update renal function indicator (KDIGO classification)
             let renalStatus = '';
             if (crcl >= 90) renalStatus = langDict.renal_normal(crcl);
             else if (crcl >= 60) renalStatus = langDict.renal_mild(crcl);
@@ -1015,7 +981,6 @@
             else renalStatus = langDict.renal_esrd(crcl);
             renalIndicator.textContent = renalStatus;
             
-            // Update renal indicator color
             renalIndicator.style.background = 
                 crcl >= 90 ? '#f0f7ff' : 
                 crcl >= 60 ? '#e6fffa' : 
@@ -1028,14 +993,12 @@
                 crcl >= 30 ? '#d69e2e' : 
                 crcl >= 15 ? '#e53e3e' : '#b71c1c';
 
-            // 5. Calculate rivaroxaban dose based on indication
             let dose = '';
             let rationale = '';
             let renalNote = '';
             let criteriaHTML = '';
             
             if (indication === 'af') {
-                // For NVAF
                 if (crcl > 50) {
                     dose = '20 mg';
                     rationale = langDict.reco_af_crcl(dose, crcl);
@@ -1043,9 +1006,9 @@
                         <div class="dose-criteria">
                             <h4><i class="fas fa-check-circle"></i> ${langDict.dose_criteria_title}</h4>
                             <ul>
-                                <li>${langDict.criteria_af_high}: ${dose} once daily</li>
-                                <li>${langDict.criteria_af_low}: 15 mg once daily</li>
-                                <li>${langDict.criteria_af_avoid}: ${langDict.reco_not_recommended}</li>
+                                <li>${langDict.criteria_af_high}</li>
+                                <li>${langDict.criteria_af_low}</li>
+                                <li>${langDict.criteria_af_avoid}</li>
                             </ul>
                         </div>
                     `;
@@ -1056,9 +1019,9 @@
                         <div class="dose-criteria">
                             <h4><i class="fas fa-check-circle"></i> ${langDict.dose_criteria_title}</h4>
                             <ul>
-                                <li>${langDict.criteria_af_high}: 20 mg once daily</li>
-                                <li>${langDict.criteria_af_low}: ${dose} once daily</li>
-                                <li>${langDict.criteria_af_avoid}: ${langDict.reco_not_recommended}</li>
+                                <li>${langDict.criteria_af_high}</li>
+                                <li>${langDict.criteria_af_low}</li>
+                                <li>${langDict.criteria_af_avoid}</li>
                             </ul>
                         </div>
                     `;
@@ -1069,22 +1032,20 @@
                 }
                 
             } else if (indication === 'vte_prophylaxis') {
-                // Check renal function for VTE prophylaxis
                 if (crcl < 30) {
                     dose = langDict.reco_not_recommended;
                     renalNote = langDict.reco_vte_prophylaxis_contra;
                 } else {
-                    dose = '10 mg once daily';
+                    dose = '10 mg une fois par jour';
                 }
                 rationale = langDict.reco_vte_prophylaxis;
                 
             } else if (indication === 'vte_initial') {
-                // Check renal function for VTE treatment
                 if (crcl < 30) {
                     dose = langDict.reco_not_recommended;
                     renalNote = langDict.reco_crcl_low(crcl);
                 } else {
-                    dose = '15 mg twice daily';
+                    dose = '15 mg deux fois par jour';
                 }
                 rationale = langDict.reco_vte_initial;
                 
@@ -1093,32 +1054,28 @@
                     dose = langDict.reco_not_recommended;
                     renalNote = langDict.reco_crcl_low(crcl);
                 } else {
-                    dose = '20 mg once daily';
+                    dose = '20 mg une fois par jour';
                 }
                 rationale = langDict.reco_vte_continuation;
                 
             } else if (indication === 'vte_prevention') {
-                // Added renal impairment check for prevention dose
                 if (crcl < 30) {
                     dose = langDict.reco_not_recommended;
                     renalNote = langDict.reco_crcl_low(crcl);
                 } else {
-                    dose = '10 mg once daily';
+                    dose = '10 mg une fois par jour';
                 }
                 rationale = langDict.reco_vte_prevention;
             }
 
-            // Add hepatic impairment note if moderate
             if (hepaticImpairment === 'moderate') {
                 rationale += langDict.reco_hepatic_moderate_note;
             }
             
-            // Add renal note if applicable
             if (renalNote) {
                 rationale += langDict.reco_renal_note(renalNote);
             }
 
-            // 5. Display results
             if (dose === langDict.reco_not_recommended) {
                 recoDiv.innerHTML = `
                     <div class="dose-display">
@@ -1138,29 +1095,22 @@
                 `;
             }
             
-            // Add animation
             recoDiv.classList.remove('fade-in');
-            void recoDiv.offsetWidth; // Trigger reflow
+            void recoDiv.offsetWidth;
             recoDiv.classList.add('fade-in');
         }
         
-        // --- PWA INSTALLATION HANDLING ---
         let deferredPrompt;
         const installBtn = document.getElementById('install-button');
         
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            
-            // Show install button
             installBtn.style.display = 'block';
             installBtn.textContent = translations[currentLanguage].install_button;
             
             installBtn.addEventListener('click', () => {
-                // Show the install prompt
                 deferredPrompt.prompt();
-                
-                // Wait for the user to respond to the prompt
                 deferredPrompt.userChoice.then((choiceResult) => {
                     if (choiceResult.outcome === 'accepted') {
                         console.log('User accepted the install prompt');
@@ -1178,7 +1128,6 @@
             installBtn.style.display = 'none';
         });
         
-        // --- SERVICE WORKER REGISTRATION ---
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/rexaban-dosing-app/service-worker.js')
