@@ -624,11 +624,12 @@
     </style>
 </head>
 <body>
+    <!-- PWA Install Button -->
     <button id="install-button">Installer l'App</button>
     
- <div class="afric-logo">
-    <img src="afric.png" alt="Afric Logo">
-</div>
+    <div class="afric-logo">
+        <img src="afric.png" alt="Afric Logo">
+    </div>
 
     <div class="container">
         <header class="app-header">
@@ -905,7 +906,7 @@
                     element.innerHTML = translations[lang][key];
                 }
             });
-            if (installButton) {
+            if (installButton && installButton.style.display === 'block') {
                 installButton.textContent = translations[lang].install_button;
             }
             calculateRivaroxabanDose();
@@ -1106,24 +1107,33 @@
             }
         }
         
+        // ===== PWA INSTALLATION HANDLING =====
         let deferredPrompt;
         const installBtn = document.getElementById('install-button');
         
         window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevent the mini-infobar from appearing on mobile
             e.preventDefault();
+            // Stash the event so it can be triggered later
             deferredPrompt = e;
+            // Update UI to notify the user they can install the PWA
             installBtn.style.display = 'block';
             installBtn.textContent = translations[currentLanguage].install_button;
             
+            // Add click event listener for the install button
             installBtn.addEventListener('click', () => {
+                // Show the install prompt
                 deferredPrompt.prompt();
+                // Wait for the user to respond to the prompt
                 deferredPrompt.userChoice.then((choiceResult) => {
                     if (choiceResult.outcome === 'accepted') {
                         console.log('User accepted the install prompt');
                     } else {
                         console.log('User dismissed the install prompt');
                     }
+                    // Reset the deferred prompt variable
                     deferredPrompt = null;
+                    // Hide the install button
                     installBtn.style.display = 'none';
                 });
             });
@@ -1131,12 +1141,31 @@
         
         window.addEventListener('appinstalled', () => {
             console.log('PWA was installed');
+            // Hide the install button after successful installation
             installBtn.style.display = 'none';
+            deferredPrompt = null;
         });
         
+        // Update install button text when language changes
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            document.querySelectorAll('[data-lang-key]').forEach(element => {
+                const key = element.getAttribute('data-lang-key');
+                if (translations[lang][key]) {
+                    if (typeof translations[lang][key] === 'function') return;
+                    element.innerHTML = translations[lang][key];
+                }
+            });
+            if (installBtn && installBtn.style.display === 'block') {
+                installBtn.textContent = translations[lang].install_button;
+            }
+            calculateRivaroxabanDose();
+        }
+        
+        // Service Worker Registration
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./service-worker.js')
+                navigator.serviceWorker.register('/service-worker.js')
                     .then(reg => {
                         console.log('Service Worker registered: ', reg);
                     })
