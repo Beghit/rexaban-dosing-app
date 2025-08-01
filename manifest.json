@@ -2,21 +2,16 @@
   "name": "Rexaban Dosing Assistant",
   "short_name": "Rexaban",
   "description": "A tool to assist with Rexaban dosing recommendations.",
-  "start_url": ".",
-  "scope": ".",
+  "start_url": "/rexaban-dosing-app/index.html",
+  "scope": "/rexaban-dosing-app/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#1a5c9e",
   "icons": [
     {
-      "src": "afric.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "afric.png",
-      "sizes": "512x512",
-      "type": "image/png"
+      "src": "/rexaban-dosing-app/afric.png",
+      "type": "image/png",
+      "sizes": "any"
     }
   ]
 }
