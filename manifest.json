@@ -7,9 +7,10 @@
   "theme_color": "#0a74da",
   "icons": [
     {
-      "src": "icons/afric.png",
+      "src": "afric.png",
       "sizes": "192x192",
       "type": "image/png"
     }
   ]
 }
+
