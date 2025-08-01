@@ -1,10 +1,11 @@
-const CACHE_NAME = 'rexaban-cache-v3';
+const CACHE_NAME = 'rexaban-cache-v4';  // Increment version
+
 const urlsToCache = [
   './',
   'index.html',
   'manifest.json',
-  'afric.png',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
+  'afric.png',  // Keep root reference
+  // Remove 'icons/afric.png' if present
 ];
 
 self.addEventListener('install', (event) => {
@@ -52,3 +53,4 @@ self.addEventListener('activate', (event) => {
     })
   );
 });
+
