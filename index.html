@@ -638,10 +638,8 @@
     </style>
 </head>
 <body>
-    <!-- Install button for PWA -->
     <button id="install-button">Installer l'App</button>
     
-    <!-- PWA notification -->
     <div class="pwa-notification" id="pwa-notification">
         Cette application peut être installée sur votre appareil.
         <button id="install-notification-button" style="margin-top: 10px; background: white; color: var(--primary); border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-weight: bold;">
@@ -650,7 +648,7 @@
     </div>
     
     <div class="afric-logo">
-        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%231a5c9e'/%3E%3Ctext x='50' y='60' font-size='30' text-anchor='middle' fill='white'%3EAR%3C/text%3E%3C/svg%3E" alt="Afric Logo">
+        <img src="afric.png" alt="Afric Logo">
     </div>
 
     <div class="container">
@@ -797,41 +795,7 @@
         </footer>
     </div>
     
-    <!-- Inline manifest content -->
-    <script type="application/manifest+json" id="manifest-content">
-        {
-            "name": "Assistant Rexaban",
-            "short_name": "Rexaban",
-            "description": "Guide de dosage du Rivaroxaban pour professionnels de santé",
-            "start_url": "/",
-            "display": "standalone",
-            "background_color": "#1a5c9e",
-            "theme_color": "#1a5c9e",
-            "icons": [
-                {
-                    "src": "icon-192.png",
-                    "sizes": "192x192",
-                    "type": "image/png"
-                },
-                {
-                    "src": "icon-512.png",
-                    "sizes": "512x512",
-                    "type": "image/png"
-                }
-            ]
-        }
-    </script>
-
     <script>
-        // Create a manifest file dynamically
-        const manifestContent = document.getElementById('manifest-content').textContent;
-        const manifestBlob = new Blob([manifestContent], {type: 'application/json'});
-        const manifestURL = URL.createObjectURL(manifestBlob);
-        const manifestLink = document.createElement('link');
-        manifestLink.rel = 'manifest';
-        manifestLink.href = manifestURL;
-        document.head.appendChild(manifestLink);
-        
         const translations = {
             en: {
                 main_title: "Rexaban Dosing Assistant",
