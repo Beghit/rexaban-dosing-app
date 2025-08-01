@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#1a5c9e">
     <title>Assistant de Dosage Rexaban</title>
-    <link rel="manifest" href="/rexaban-dosing-app/manifest.json">
+    <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -621,14 +621,36 @@
             background: var(--primary-dark);
             transform: translateY(-2px);
         }
+        
+        .pwa-notification {
+            position: fixed;
+            bottom: 70px;
+            right: 20px;
+            padding: 15px 20px;
+            background: var(--primary);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: none;
+            max-width: 300px;
+        }
     </style>
 </head>
 <body>
-    <!-- PWA Install Button -->
+    <!-- Install button for PWA -->
     <button id="install-button">Installer l'App</button>
     
+    <!-- PWA notification -->
+    <div class="pwa-notification" id="pwa-notification">
+        Cette application peut être installée sur votre appareil.
+        <button id="install-notification-button" style="margin-top: 10px; background: white; color: var(--primary); border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-weight: bold;">
+            Installer
+        </button>
+    </div>
+    
     <div class="afric-logo">
-        <img src="afric.png" alt="Afric Logo">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%231a5c9e'/%3E%3Ctext x='50' y='60' font-size='30' text-anchor='middle' fill='white'%3EAR%3C/text%3E%3C/svg%3E" alt="Afric Logo">
     </div>
 
     <div class="container">
@@ -774,8 +796,42 @@
             <p><strong class="signature">Développé par Dr EL HAJJAJ BELGHAIT</strong></p>
         </footer>
     </div>
+    
+    <!-- Inline manifest content -->
+    <script type="application/manifest+json" id="manifest-content">
+        {
+            "name": "Assistant Rexaban",
+            "short_name": "Rexaban",
+            "description": "Guide de dosage du Rivaroxaban pour professionnels de santé",
+            "start_url": "/",
+            "display": "standalone",
+            "background_color": "#1a5c9e",
+            "theme_color": "#1a5c9e",
+            "icons": [
+                {
+                    "src": "icon-192.png",
+                    "sizes": "192x192",
+                    "type": "image/png"
+                },
+                {
+                    "src": "icon-512.png",
+                    "sizes": "512x512",
+                    "type": "image/png"
+                }
+            ]
+        }
+    </script>
 
     <script>
+        // Create a manifest file dynamically
+        const manifestContent = document.getElementById('manifest-content').textContent;
+        const manifestBlob = new Blob([manifestContent], {type: 'application/json'});
+        const manifestURL = URL.createObjectURL(manifestBlob);
+        const manifestLink = document.createElement('link');
+        manifestLink.rel = 'manifest';
+        manifestLink.href = manifestURL;
+        document.head.appendChild(manifestLink);
+        
         const translations = {
             en: {
                 main_title: "Rexaban Dosing Assistant",
@@ -832,7 +888,8 @@
                 renal_moderate: (crcl) => `CrCl: ${crcl} mL/min (Moderate Impairment)`,
                 renal_severe: (crcl) => `CrCl: ${crcl} mL/min (Severe Impairment)`,
                 renal_esrd: (crcl) => `CrCl: ${crcl} mL/min (ESRD)`,
-                install_button: "Install App"
+                install_button: "Install App",
+                pwa_notification: "This app can be installed on your device."
             },
             fr: {
                 main_title: "Assistant de Dosage Rexaban",
@@ -889,13 +946,16 @@
                 renal_moderate: (crcl) => `Clairance Créatinine: ${crcl} mL/min (Insuffisance Modérée)`,
                 renal_severe: (crcl) => `Clairance Créatinine: ${crcl} mL/min (Insuffisance Sévère)`,
                 renal_esrd: (crcl) => `Clairance Créatinine: ${crcl} mL/min (Maladie rénale terminale)`,
-                install_button: "Installer l'App"
+                install_button: "Installer l'App",
+                pwa_notification: "Cette application peut être installée sur votre appareil."
             }
         };
 
         let currentLanguage = 'fr';
         const langToggle = document.getElementById('language-toggle');
         const installButton = document.getElementById('install-button');
+        const installNotificationButton = document.getElementById('install-notification-button');
+        const pwaNotification = document.getElementById('pwa-notification');
 
         function setLanguage(lang) {
             currentLanguage = lang;
@@ -932,6 +992,17 @@
             
             calculateRivaroxabanDose();
             setLanguage('fr');
+            
+            // Register service worker
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('service-worker.js')
+                    .then(reg => {
+                        console.log('Service Worker registered:', reg);
+                    })
+                    .catch(err => {
+                        console.log('Service Worker registration failed:', err);
+                    });
+            }
         });
 
         function calculateRivaroxabanDose() {
@@ -1109,19 +1180,26 @@
         
         // ===== PWA INSTALLATION HANDLING =====
         let deferredPrompt;
-        const installBtn = document.getElementById('install-button');
         
         window.addEventListener('beforeinstallprompt', (e) => {
             // Prevent the mini-infobar from appearing on mobile
             e.preventDefault();
             // Stash the event so it can be triggered later
             deferredPrompt = e;
-            // Update UI to notify the user they can install the PWA
-            installBtn.style.display = 'block';
-            installBtn.textContent = translations[currentLanguage].install_button;
+            
+            // Show the install button
+            installButton.style.display = 'block';
+            installButton.textContent = translations[currentLanguage].install_button;
+            
+            // Also show a notification
+            pwaNotification.style.display = 'block';
+            pwaNotification.textContent = translations[currentLanguage].pwa_notification;
+            
+            // Update notification button
+            installNotificationButton.textContent = translations[currentLanguage].install_button;
             
             // Add click event listener for the install button
-            installBtn.addEventListener('click', () => {
+            installButton.addEventListener('click', () => {
                 // Show the install prompt
                 deferredPrompt.prompt();
                 // Wait for the user to respond to the prompt
@@ -1134,7 +1212,27 @@
                     // Reset the deferred prompt variable
                     deferredPrompt = null;
                     // Hide the install button
-                    installBtn.style.display = 'none';
+                    installButton.style.display = 'none';
+                    pwaNotification.style.display = 'none';
+                });
+            });
+            
+            // Add click event listener for the notification install button
+            installNotificationButton.addEventListener('click', () => {
+                // Show the install prompt
+                deferredPrompt.prompt();
+                // Wait for the user to respond to the prompt
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the install prompt');
+                    } else {
+                        console.log('User dismissed the install prompt');
+                    }
+                    // Reset the deferred prompt variable
+                    deferredPrompt = null;
+                    // Hide the install button
+                    installButton.style.display = 'none';
+                    pwaNotification.style.display = 'none';
                 });
             });
         });
@@ -1142,37 +1240,45 @@
         window.addEventListener('appinstalled', () => {
             console.log('PWA was installed');
             // Hide the install button after successful installation
-            installBtn.style.display = 'none';
+            installButton.style.display = 'none';
+            pwaNotification.style.display = 'none';
             deferredPrompt = null;
         });
         
-        // Update install button text when language changes
-        function setLanguage(lang) {
-            currentLanguage = lang;
-            document.querySelectorAll('[data-lang-key]').forEach(element => {
-                const key = element.getAttribute('data-lang-key');
-                if (translations[lang][key]) {
-                    if (typeof translations[lang][key] === 'function') return;
-                    element.innerHTML = translations[lang][key];
-                }
-            });
-            if (installBtn && installBtn.style.display === 'block') {
-                installBtn.textContent = translations[lang].install_button;
-            }
-            calculateRivaroxabanDose();
-        }
+        // Service Worker
+        const serviceWorkerContent = `
+        self.addEventListener('install', event => {
+            console.log('Service Worker installed');
+        });
         
-        // Service Worker Registration
+        self.addEventListener('activate', event => {
+            console.log('Service Worker activated');
+        });
+        
+        self.addEventListener('fetch', event => {
+            // Cache-first strategy
+            event.respondWith(
+                caches.match(event.request)
+                    .then(response => {
+                        return response || fetch(event.request);
+                    }
+            );
+        });
+        `;
+        
+        // Create a service worker file dynamically
+        const serviceWorkerBlob = new Blob([serviceWorkerContent], {type: 'application/javascript'});
+        const serviceWorkerURL = URL.createObjectURL(serviceWorkerBlob);
+        
+        // Register service worker
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js')
-                    .then(reg => {
-                        console.log('Service Worker registered: ', reg);
-                    })
-                    .catch(err => {
-                        console.log('Service Worker registration failed: ', err);
-                    });
-            });
+            navigator.serviceWorker.register(serviceWorkerURL)
+                .then(reg => {
+                    console.log('Service Worker registered:', reg);
+                })
+                .catch(err => {
+                    console.log('Service Worker registration failed:', err);
+                });
         }
     </script>
 </body>
