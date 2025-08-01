@@ -1,9 +1,9 @@
 const CACHE_NAME = 'rexaban-cache-v3';
 const urlsToCache = [
-  '/rexaban-dosing-app/',
-  '/rexaban-dosing-app/index.html',
-  '/rexaban-dosing-app/manifest.json',
-  '/rexaban-dosing-app/afric.png',
+  './',
+  'index.html',
+  'manifest.json',
+  'afric.png',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
 ];
 
@@ -33,7 +33,7 @@ self.addEventListener('fetch', (event) => {
       .catch(() => {
         // Offline: return cached version or fallback
         return caches.match(event.request)
-          .then(response => response || caches.match('/rexaban-dosing-app/index.html'));
+          .then(response => response || caches.match('index.html'));
       })
   );
 });
