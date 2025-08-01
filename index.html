@@ -969,6 +969,10 @@
             if (installButton && installButton.style.display === 'block') {
                 installButton.textContent = translations[lang].install_button;
             }
+            if (pwaNotification.style.display === 'block') {
+                pwaNotification.textContent = translations[lang].pwa_notification;
+                installNotificationButton.textContent = translations[lang].install_button;
+            }
             calculateRivaroxabanDose();
         }
 
@@ -1244,42 +1248,6 @@
             pwaNotification.style.display = 'none';
             deferredPrompt = null;
         });
-        
-        // Service Worker
-        const serviceWorkerContent = `
-        self.addEventListener('install', event => {
-            console.log('Service Worker installed');
-        });
-        
-        self.addEventListener('activate', event => {
-            console.log('Service Worker activated');
-        });
-        
-        self.addEventListener('fetch', event => {
-            // Cache-first strategy
-            event.respondWith(
-                caches.match(event.request)
-                    .then(response => {
-                        return response || fetch(event.request);
-                    }
-            );
-        });
-        `;
-        
-        // Create a service worker file dynamically
-        const serviceWorkerBlob = new Blob([serviceWorkerContent], {type: 'application/javascript'});
-        const serviceWorkerURL = URL.createObjectURL(serviceWorkerBlob);
-        
-        // Register service worker
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register(serviceWorkerURL)
-                .then(reg => {
-                    console.log('Service Worker registered:', reg);
-                })
-                .catch(err => {
-                    console.log('Service Worker registration failed:', err);
-                });
-        }
     </script>
 </body>
 </html>
